@@ -79,7 +79,7 @@ class HomeFragment : BaseFragment() {
             movieAdapter.submitList(movies)
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.moviesData.collectLatest {
+            homeViewModel.moviesRemoteMediator.collectLatest {
                 moviePagingAdapter.submitData(it)
             }
         }

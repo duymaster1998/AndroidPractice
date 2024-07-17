@@ -6,10 +6,17 @@ import com.example.myapplication.data.model.MovieModel
 import com.example.myapplication.data.network.ApiService
 
 class MoviePagingSource(
-    val apiService: ApiService
+    private val apiService: ApiService
 ) : PagingSource<Int, MovieModel>() {
+    companion object {
+        private const val STARTING_PAGE_INDEX = 1
+    }
+
     override fun getRefreshKey(state: PagingState<Int, MovieModel>): Int? {
-        TODO("Not yet implemented")
+        return state.anchorPosition?.let { anchorPosition->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1) ?:
+            state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        }
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieModel> {
